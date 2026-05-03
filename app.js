@@ -1,12 +1,19 @@
 const productContainer = document.querySelector(".products-container");
+const messageContainer = document.querySelector(".message-container");
 const API_URL = "https://dummyjson.com/products?limit=200";
 
 let allProducts;
 async function getProducts() {
-  const respones = await fetch(API_URL);
-  allProducts = await respones.json();
-
-  reanderProducts(allProducts.products);
+  try {
+    showMessage("Loading...");
+    const respones = await fetch(API_URL);
+    allProducts = await respones.json();
+    hideMessage();
+    reanderProducts(allProducts.products);
+  } catch (error) {
+    productContainer.innerHTML = "";
+    showMessage("Something went wrong..");
+  }
 }
 
 getProducts();
@@ -24,7 +31,15 @@ function reanderProducts(products) {
       </div>
     </div>
     `;
-
-    productContainer.innerHTML = html;
   });
+  productContainer.innerHTML = html;
+}
+
+function showMessage(msg) {
+  messageContainer.textContent = msg;
+}
+
+function hideMessage(msg) {
+  messageContainer.style.display = "block";
+  messageContainer.textContent = msg;
 }
