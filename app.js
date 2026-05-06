@@ -2,11 +2,11 @@
 const productContainer = document.querySelector(".products-container");
 const messageContainer = document.querySelector(".message-container");
 const inptEl = document.querySelector(".inpt-box");
-const serchBtn = document.querySelector(".btn");
+const searchBtn = document.querySelector(".btn");
 const select = document.querySelector("#sort-option");
 const API_URL = "https://dummyjson.com/products?limit=10";
 
-serchBtn.addEventListener("click", search);
+searchBtn.addEventListener("click", search);
 select.addEventListener("change", sort);
 let allProducts;
 let currentProducts;
@@ -53,27 +53,26 @@ function showMessage(msg) {
 }
 
 // Hide message container
-function hideMessage(msg) {
-  messageContainer.textContent = msg;
+function hideMessage() {
+  messageContainer.style.display = "none";
 }
 
 // Filter products based on user search input and update UI
 function search() {
   let filtered = allProducts.products;
   const value = inptEl.value;
+  const searchValue = value.toLowerCase().trim();
 
   // If input is empty, show all products again
   if (value.trim() === "") {
-    renderProducts(allProducts.products);
+    currentProducts = allProducts.products;
+    renderProducts(currentProducts);
     hideMessage();
     return;
   } else {
     // Filter products by title match (case-insensitive)
     filtered = filtered.filter((pro) =>
-      pro.title
-        ?.toLowerCase()
-        .trim()
-        .includes(value?.toLowerCase().trim() || ""),
+      pro.title.toLowerCase().trim().includes(searchValue),
     );
 
     // If no products match, show message
@@ -85,6 +84,8 @@ function search() {
       hideMessage();
     }
   }
+
+  currentProducts = filtered;
 }
 
 function sort(evt) {
@@ -92,12 +93,13 @@ function sort(evt) {
   let sorted = [...currentProducts];
 
   if (selectedValue === "default") {
-    sorted = currentProducts;
+    sorted = [...allProducts.products];
   } else if (selectedValue === "low-high") {
     sorted = sorted.sort((a, b) => a.price - b.price);
   } else if (selectedValue === "high-low") {
     sorted = sorted.sort((a, b) => b.price - a.price);
   }
 
-  renderProducts(sorted);
+  currentProducts = sorted;
+  renderProducts(currentProducts);
 }
