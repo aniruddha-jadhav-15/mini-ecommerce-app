@@ -3,17 +3,21 @@ const productContainer = document.querySelector(".products-container");
 const messageContainer = document.querySelector(".message-container");
 const inptEl = document.querySelector(".inpt-box");
 const serchBtn = document.querySelector(".btn");
-const API_URL = "https://dummyjson.com/products?limit=200";
+const select = document.querySelector("#sort-option");
+const API_URL = "https://dummyjson.com/products?limit=10";
 
 serchBtn.addEventListener("click", search);
-
+select.addEventListener("change", sort);
 let allProducts;
+let currentProducts;
+
 // Fetch products from API and manage loading/error states
 async function getProducts() {
   try {
     showMessage("Loading...");
     const response = await fetch(API_URL);
     allProducts = await response.json();
+    currentProducts = allProducts.products;
     hideMessage();
     renderProducts(allProducts.products);
   } catch (error) {
@@ -81,4 +85,19 @@ function search() {
       hideMessage();
     }
   }
+}
+
+function sort(evt) {
+  const selectedValue = evt.target.value;
+  let sorted = [...currentProducts];
+
+  if (selectedValue === "default") {
+    sorted = currentProducts;
+  } else if (selectedValue === "low-high") {
+    sorted = sorted.sort((a, b) => a.price - b.price);
+  } else if (selectedValue === "high-low") {
+    sorted = sorted.sort((a, b) => b.price - a.price);
+  }
+
+  renderProducts(sorted);
 }

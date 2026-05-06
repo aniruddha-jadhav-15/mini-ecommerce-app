@@ -7,9 +7,20 @@
   </head>
   <body>
     <h1>Products</h1>
-    <div>
-      <input class="inpt-box" type="text" placeholder="Serch Products..." />
-      <button class="btn">🔍</button>
+
+    <div class="nav" style="display: flex; gap: 10px">
+      <div>
+        <input class="inpt-box" type="text" placeholder="Serch Products..." />
+        <button class="btn">🔍</button>
+      </div>
+
+      <div>
+        <select id="sort-option">
+          <option value="defult">defult</option>
+          <option value="low-high">low-high</option>
+          <option value="high-low">high-low</option>
+        </select>
+      </div>
     </div>
     <div class="products-container"></div>
     <div class="message-container"></div>
