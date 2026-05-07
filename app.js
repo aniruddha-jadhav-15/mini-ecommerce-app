@@ -4,10 +4,13 @@ const messageContainer = document.querySelector(".message-container");
 const inptEl = document.querySelector(".inpt-box");
 const searchBtn = document.querySelector(".btn");
 const select = document.querySelector("#sort-option");
+const categorySelect = document.querySelector("#category-dropdown");
 const API_URL = "https://dummyjson.com/products?limit=10";
 
 searchBtn.addEventListener("click", search);
 select.addEventListener("change", sort);
+
+// Store original API data and currently displayed products
 let allProducts;
 let currentProducts;
 
@@ -18,12 +21,15 @@ async function getProducts() {
     const response = await fetch(API_URL);
     allProducts = await response.json();
     currentProducts = allProducts.products;
+    addCategoryOptions();
     hideMessage();
     renderProducts(allProducts.products);
   } catch (error) {
     productContainer.innerHTML = "";
     showMessage("Something went wrong..");
   }
+
+  console.log(currentProducts);
 }
 
 getProducts();
@@ -88,6 +94,7 @@ function search() {
   currentProducts = filtered;
 }
 
+// Handle product sorting based on selected option
 function sort(evt) {
   const selectedValue = evt.target.value;
   let sorted = [...currentProducts];
@@ -103,3 +110,43 @@ function sort(evt) {
   currentProducts = sorted;
   renderProducts(currentProducts);
 }
+
+// Generate unique category options dynamically from API data
+function addCategoryOptions() {
+  categorySelect.innerHTML = "";
+  const products = allProducts.products;
+  const categories = new Set(products.map((pro) => pro.category));
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "all";
+  defaultOption.textContent = "All Categories";
+  categorySelect.append(defaultOption);
+
+  categories.forEach((cat) => {
+    const option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    categorySelect.append(option);
+  });
+}
+
+// Filter products based on selected category
+categorySelect.addEventListener("change", categoryFilter);
+
+function categoryFilter(evt) {
+  let selectedCategory = evt.target.value.toLowerCase();
+  const products = allProducts.products;
+  if (selectedCategory === "all") {
+    currentProducts = products;
+    renderProducts(currentProducts);
+    return;
+  } else {
+    currentProducts = products.filter(
+      (pro) => pro.category.toLowerCase() === selectedCategory,
+    );
+  }
+
+  renderProducts(currentProducts);
+}
+
+
