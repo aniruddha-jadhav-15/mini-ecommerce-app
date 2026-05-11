@@ -4,6 +4,7 @@ import { state } from "./state.js";
 import { fetchProducts } from "./api.js";
 import {
   renderProducts,
+  renderCategories,
   showMessage,
   hideMessage,
   addCategoryOptions,
@@ -31,11 +32,13 @@ async function init(params) {
 
     // display all products on screen
     renderProducts(products);
+    renderCategories(products);
 
     // attach search, sort, category event listeners
     setupFilters();
   } catch (error) {
     // show friendly error if API fails
+    console.log("ERROR:", error);
     showMessage("Something went wrong. Please try again.");
   }
 }

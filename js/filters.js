@@ -48,7 +48,7 @@ export function applyFilters() {
 // called once when app starts
 
 export function setupFilters() {
-  const searchBtn = document.querySelector(".btn");
+  const searchBtn = document.querySelector("#searchBtn");
   const inptEl = document.querySelector(".inpt-box");
   const select = document.querySelector("#sort-option");
   const categorySelect = document.querySelector("#category-dropdown");
