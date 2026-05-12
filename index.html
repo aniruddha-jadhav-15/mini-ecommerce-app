@@ -111,5 +111,13 @@
     <div class="message-container"></div>
 
     <script type="module" src="js/app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log(
+          "searchBtn in HTML script:",
+          document.querySelector("#searchBtn"),
+        );
+      });
+    </script>
   </body>
 </html>

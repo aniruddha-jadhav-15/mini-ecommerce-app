@@ -4,12 +4,12 @@ import { state } from "./state.js";
 import { fetchProducts } from "./api.js";
 import {
   renderProducts,
-  renderCategories,
   showMessage,
   hideMessage,
   addCategoryOptions,
 } from "./ui.js";
 import { setupFilters } from "./filters.js";
+import { setupCart } from "./cart.js";
 
 // main function — runs when page loads and sets everything up
 async function init(params) {
@@ -32,10 +32,12 @@ async function init(params) {
 
     // display all products on screen
     renderProducts(products);
-    renderCategories(products);
 
     // attach search, sort, category event listeners
     setupFilters();
+
+    // setup cart events — add to cart, open/close drawer, quantity controls
+    setupCart();
   } catch (error) {
     // show friendly error if API fails
     console.log("ERROR:", error);

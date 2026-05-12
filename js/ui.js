@@ -1,5 +1,7 @@
 // ui.js — only responsible for DOM updates
 
+import { state } from "./state.js";
+
 // grab product and message containers once at the top — reuse everywhere
 const productContainer = document.querySelector(".products-container");
 const messageContainer = document.querySelector("#messageContainer");
@@ -63,7 +65,11 @@ export function hideMessage() {
 // reads unique categories from products and builds dropdown options
 export function addCategoryOptions(products) {
   const categorySelect = document.querySelector("#category-dropdown");
+
+  if (!categorySelect) return;
+
   categorySelect.innerHTML = "";
+  // rest of code...
 
   // Set automatically removes duplicate categories
   const categories = new Set(products.map((pro) => pro.category));
@@ -81,4 +87,51 @@ export function addCategoryOptions(products) {
     option.textContent = cat;
     categorySelect.append(option);
   });
+}
+
+// renders cart items in drawer and updates total
+
+export function renderCartItems() {
+  const cartItems = document.querySelector("#cartItems");
+  const cartTotal = document.querySelector("#cartTotal");
+  const cartEmpty = document.querySelector("#cartEmpty");
+
+  if (state.cart.length === 0) {
+    cartEmpty.style.display = "block";
+    cartItems.innerHTML = "";
+    cartTotal.textContent = "$0.00";
+    return;
+  }
+
+  cartEmpty.style.display = "none";
+
+  let html = "";
+  state.cart.forEach((item) => {
+    html += `
+      <div class="cart-item">
+        <img src="${item.thumbnail}" alt="${item.title}" class="cart-item__img">
+        <div class="cart-item__info">
+          <p class="cart-item__title">${item.title}</p>
+          <p class="cart-item__price">$${item.price.toFixed(2)}</p>
+        </div>
+        <div class="cart-item__controls">
+          <button class="qty-btn" data-id="${item.id}" data-type="decrease">−</button>
+          <span class="qty-num">${item.quantity}</span>
+          <button class="qty-btn" data-id="${item.id}" data-type="increase">+</button>
+          <button class="remove-btn" data-id="${item.id}">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  cartItems.innerHTML = html;
+
+  // calculate total
+  const total = state.cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  cartTotal.textContent = `$${total.toFixed(2)}`;
 }
