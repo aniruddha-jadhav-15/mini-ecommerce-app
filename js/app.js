@@ -33,6 +33,19 @@ async function init(params) {
     // display all products on screen
     renderProducts(products);
 
+    // update hero with first electronics product
+    const featuredProduct = products.find(
+      (p) => p.category === "laptops" || p.category === "smartphones",
+    );
+    if (featuredProduct) {
+      document.querySelector(".hero__title").textContent =
+        featuredProduct.title;
+      document.querySelector(".hero__sub").textContent =
+        featuredProduct.description;
+      document.querySelector(".hero__image img").src =
+        featuredProduct.thumbnail;
+    }
+
     // attach search, sort, category event listeners
     setupFilters();
 
