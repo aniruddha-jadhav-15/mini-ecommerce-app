@@ -53,11 +53,6 @@ export function setupFilters() {
   const select = document.querySelector("#sort-option");
   const categorySelect = document.querySelector("#category-dropdown");
 
-  console.log("searchBtn:", searchBtn);
-  console.log("inptEl:", inptEl);
-  console.log("select:", select);
-  console.log("categorySelect:", categorySelect);
-
   // when search button clicked — update search filter and apply
   document.querySelector("#searchBtn").addEventListener("click", () => {
     const value = document.querySelector(".inpt-box").value;
@@ -77,5 +72,5 @@ export function setupFilters() {
     .addEventListener("change", (e) => {
       state.filters.category = e.target.value.toLowerCase();
       applyFilters();
-    }); 
+    });
 }

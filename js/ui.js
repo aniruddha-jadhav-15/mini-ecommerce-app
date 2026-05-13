@@ -8,31 +8,40 @@ const messageContainer = document.querySelector("#messageContainer");
 
 // builds product cards from array and displays them on screen
 export function renderProducts(products) {
+  // show only visibleCount products
+  const visibleProducts = products.slice(0, state.visibleCount);
   let html = "";
 
   // loop through each product and create a card html string
-  products.forEach((pro) => {
+  visibleProducts.forEach((pro) => {
     html += `
-  <div class="card">
-    <div class="image-container">
-      <img src="${pro.thumbnail}" alt="${pro.title}">
-    </div>
-    <div class="card__body">
-      <p class="card__category">${pro.category}</p>
-      <h2 class="title">${pro.title}</h2>
-      <div class="card__footer">
-     <p class="price">$${pro.price.toFixed(2)}</p>
-        <button class="add-to-cart-btn" data-id="${pro.id}">
-          Add to Cart
-        </button>
+      <div class="card">
+        <div class="image-container">
+          <img src="${pro.thumbnail}" alt="${pro.title}">
+        </div>
+        <div class="card__body">
+          <p class="card__category">${pro.category}</p>
+          <h2 class="title">${pro.title}</h2>
+          <div class="card__footer">
+            <p class="price">$${pro.price.toFixed(2)}</p>
+            <button class="add-to-cart-btn" data-id="${pro.id}">
+              Add to Cart
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-`;
+    `;
   });
 
-  // inject all cards into DOM in one update — better performance
+  // inject all cards into DOM in one update
   productContainer.innerHTML = html;
+
+  // show/hide load more button
+  const loadMoreBtn = document.querySelector("#loadMoreBtn");
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display =
+      products.length > state.visibleCount ? "block" : "none";
+  }
 }
 
 // renders category cards
@@ -68,8 +77,8 @@ export function addCategoryOptions(products) {
 
   if (!categorySelect) return;
 
-  categorySelect.innerHTML = "";
   // rest of code...
+  categorySelect.innerHTML = "";
 
   // Set automatically removes duplicate categories
   const categories = new Set(products.map((pro) => pro.category));

@@ -33,7 +33,7 @@ async function init(params) {
     // display all products on screen
     renderProducts(products);
 
-    // update hero with first electronics product
+    // update hero with featured electronics product
     const featuredProduct = products.find(
       (p) => p.category === "laptops" || p.category === "smartphones",
     );
@@ -41,7 +41,7 @@ async function init(params) {
       document.querySelector(".hero__title").textContent =
         featuredProduct.title;
       document.querySelector(".hero__sub").textContent =
-        featuredProduct.description;
+        featuredProduct.description.slice(0, 60) + "...";
       document.querySelector(".hero__image img").src =
         featuredProduct.thumbnail;
     }
@@ -51,9 +51,17 @@ async function init(params) {
 
     // setup cart events — add to cart, open/close drawer, quantity controls
     setupCart();
+
+    // setup load more button
+    const loadMoreBtn = document.querySelector("#loadMoreBtn");
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener("click", () => {
+        state.visibleCount += 8;
+        renderProducts(state.currentProducts);
+      });
+    }
   } catch (error) {
     // show friendly error if API fails
-    console.log("ERROR:", error);
     showMessage("Something went wrong. Please try again.");
   }
 }

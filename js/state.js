@@ -4,6 +4,7 @@ export const state = {
   allProducts: [],
   currentProducts: [],
   cart: [],
+  visibleCount: 8,
   filters: {
     search: "",
     category: "all",
