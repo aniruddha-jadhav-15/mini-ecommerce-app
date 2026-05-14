@@ -53,24 +53,35 @@ export function setupFilters() {
   const select = document.querySelector("#sort-option");
   const categorySelect = document.querySelector("#category-dropdown");
 
-  // when search button clicked — update search filter and apply
-  document.querySelector("#searchBtn").addEventListener("click", () => {
+  function handleSearch() {
     const value = document.querySelector(".inpt-box").value;
     state.filters.search = value.toLowerCase().trim();
     applyFilters();
+  }
+
+  // when search button clicked — update search filter and apply
+  searchBtn.addEventListener("click", handleSearch);
+
+  inptEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   });
 
   // when sort dropdown changes — update sort filter and apply
-  document.querySelector("#sort-option").addEventListener("change", (e) => {
+  select.addEventListener("change", (e) => {
     state.filters.sort = e.target.value;
     applyFilters();
   });
 
   // when category dropdown changes — update category filter and apply
-  document
-    .querySelector("#category-dropdown")
-    .addEventListener("change", (e) => {
-      state.filters.category = e.target.value.toLowerCase();
-      applyFilters();
-    });
+  categorySelect.addEventListener("change", (e) => {
+    state.filters.category = e.target.value.toLowerCase();
+
+    // reset search when category changes
+    state.filters.search = "";
+    document.querySelector(".inpt-box").value = "";
+
+    applyFilters();
+  });
 }
